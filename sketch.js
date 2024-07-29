@@ -886,7 +886,6 @@ function randomiseEverything() {
 
     // individ. instruments
     individualInstrumentArray = [];
-    // Populate the array based on the index value
     for (let i = 0; i < 37; i++) {
       if (i >= numPercussionParts) {
         individualInstrumentArray.push(1); // Always 1 for i >= numPercussionParts
@@ -909,83 +908,70 @@ function randomInt(min, max) {
 let sequence = []; // Array to store the sequence
 let maxDifference = 2;
 
-// create random single line melody - marginal improvement on completely random notes
+// create random single line melody
 function createRandomPoints() {
   grid = [];
   sequence = [];
   
-  // Initialize the grid with false values
+  // Initialize grid 
   for (let i = 0; i < rows; i++) {
     grid.push(new Array(cols).fill(false));
   }
   
-  // Start the sequence with a number in row 5 or above
-  let firstNumber = floor(random(6, rows)); // Ensure starting number is from row 6 or above
+  // constrain melody to upper rows
+  let firstNumber = floor(random(6, rows));
   sequence.push(firstNumber);
   
-  // Generate the rest of the sequence, making sure all numbers are 6 or above
+  // Finish sequence ensuring above lower rows
   for (let i = 1; i < cols; i++) {
     let prevNumber = sequence[i - 1];
     
-    // Calculate the next number within the allowable range (rows 5 and above)
     let nextNumber = prevNumber + floor(random(-maxDifference, maxDifference + 1));
-    
-    // Ensure the next number stays within the defined range, but always 5 or above
     nextNumber = constrain(nextNumber, 6, rows-1);
-    
-    // Add the number to the sequence
     sequence.push(nextNumber);
   }  
   
-  // Set values in the grid based on the sequence
+  // Set values in grid based on random sequence
   for (let i = 0; i < cols; i++) {
-    // Introduce a probability to skip setting the value in the grid
+    // random rests
     if (random(1) < 0.1) {
-      continue; // Skip setting this item in the grid
+      continue;
     }
 
-    // Sequence values correspond to row indices
     let row = sequence[i];
-    let col = i; // Column index is just the iteration index
+    let col = i;
     grid[row][col] = true;
   }
 }
 
 function generatePercussionPart() {
+  // lower rows for perc. part
   sequence = [];
   
-  // Start the sequence with a number in row 5 or below
-  let firstNumber = floor(random(0, 4)); // Ensure starting number is from row 0 to 5
+  let firstNumber = floor(random(0, 4));
   sequence.push(firstNumber);
   
-  // Generate the rest of the sequence, making sure all numbers are 5 or below
   for (let i = 1; i < cols; i++) {
     let prevNumber = sequence[i - 1];
     
-    // Calculate the next number within the allowable range (rows 0 to 5)
     let nextNumber = prevNumber + floor(random(-maxDifference, maxDifference + 1));
     
-    // Ensure the next number stays within the defined range, but always 5 or below
     nextNumber = constrain(nextNumber, 0, 4);
     
-    // Add the number to the sequence
     sequence.push(nextNumber);
   }  
   
-  // Set values in the grid based on the sequence for rows 5 and below
   for (let i = 0; i < cols; i++) {
-    // Introduce a probability to skip setting the value in the grid
+    // Introduce a probability to skip setting the value in the grid (rests)
     if (random(1) < 0.1) {
-      continue; // Skip setting this item in the grid
+      continue;
     }
 
-    // Sequence values correspond to row indices
     let row = sequence[i];
-    let col = i; // Column index is just the iteration index
-
-    // Ensure that only rows 5 and below are modified
+    let col = i; 
+    
     if (row <= 4) {
-      grid[row][col] = true; // Set the grid cell to true
+      grid[row][col] = true;
     }
   }
 }
