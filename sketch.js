@@ -1,3 +1,5 @@
+// fix randomisation for the percussion and organ
+
 p5.disableFriendlyErrors = true;
 let lastState = '';
 let debounceTimer;
@@ -947,17 +949,13 @@ function createRandomPoints() {
 function generatePercussionPart() {
   // lower rows for perc. part
   sequence = [];
-  
   let firstNumber = floor(random(0, 4));
   sequence.push(firstNumber);
   
   for (let i = 1; i < cols; i++) {
     let prevNumber = sequence[i - 1];
-    
     let nextNumber = prevNumber + floor(random(-maxDifference, maxDifference + 1));
-    
     nextNumber = constrain(nextNumber, 0, 4);
-    
     sequence.push(nextNumber);
   }  
   
